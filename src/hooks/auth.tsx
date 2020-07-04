@@ -65,10 +65,10 @@ const AuthProvider: React.FC = ({ children }) => {
 
     // Here comes the default user, since AgendaApi doesn't have one
     const user: User = {
-      avatar_url: 'https://i.imgur.com/pulGiJF.jpg',
+      avatar_url: 'https://i.imgur.com/cOip4HQ.jpg',
       email,
       id: '1',
-      name: 'Default User',
+      name: 'Jim Halpert',
     };
 
     const { token } = reseponse.data;

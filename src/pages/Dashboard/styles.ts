@@ -12,7 +12,7 @@ export const Container = styled.View`
 export const Header = styled.View`
   padding: 24px;
   padding-top: ${getStatusBarHeight() + 24}px;
-  background: ${({ theme }) => theme.colors.blackMedium};
+  background: ${({ theme }) => theme.colors.white};
 
   flex-direction: row;
   justify-content: space-between;
@@ -20,7 +20,7 @@ export const Header = styled.View`
 `;
 
 export const HeaderTitle = styled.Text`
-  color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.gray};
   font-size: 20px;
 
   line-height: 28px;
