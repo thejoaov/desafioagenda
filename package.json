@@ -5,7 +5,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
@@ -60,29 +61,13 @@
     "eslint-plugin-react-hooks": "^4.0.5",
     "husky": "^4.2.5",
     "jest": "^26.1.0",
+    "jest-expo": "^38.0.2",
+    "jest-styled-components": "^7.0.2",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "react-native-testing-library": "^2.1.0",
     "react-test-renderer": "^16.13.1",
     "typescript": "~3.9.5"
   },
-  "private": true,
-  "jest": {
-    "preset": "react-native",
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-native/extend-expect"
-    ],
-    "setupFiles": [
-      "./src/__tests__/setupTests.ts",
-      "./node_modules/react-native-gesture-handler/jestSetup.js"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
-  }
+  "private": true
 }

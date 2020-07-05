@@ -8,7 +8,6 @@ import { useAuth } from '../../hooks/auth';
 import {
   CustomDrawerContent,
   CustomDrawerItem,
-  LogoutDrawerItem,
   HorizontalRule,
   ContainerProfile,
   ProfilePhoto,
@@ -22,7 +21,7 @@ const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
   const { navigation } = props;
   const [counter, setCounter] = useState(0);
 
-  const logout = useCallback(() => {
+  const handleLogout = useCallback(() => {
     Alert.alert(
       'Já vai? 🥺',
       'Deseja deslogar sua conta?',
@@ -37,10 +36,8 @@ const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
 
   const handleEasterEgg = useCallback(() => {
     setCounter(counter + 1);
-    if (counter < 2) {
-      Platform.OS === 'android' &&
-        Toast.show(`Counter: ${counter}`, Toast.SHORT);
-    } else {
+    Platform.OS === 'android' && Toast.show(`Counter: ${counter}`, Toast.SHORT);
+    if (counter > 2) {
       Alert.alert('Michael Scott says:', '"That\'s what she said 😀"');
     }
   }, [counter]);
@@ -64,9 +61,9 @@ const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
         onPress={handleDashboard}
         icon={() => <Icon name="home" size={23} />}
       />
-      <LogoutDrawerItem
-        label="Sair"
-        onPress={logout}
+      <CustomDrawerItem
+        label="Logout"
+        onPress={handleLogout}
         icon={() => <Icon name="import" size={23} />}
       />
     </CustomDrawerContent>

@@ -1,8 +1,16 @@
 import React, { useCallback, useRef } from 'react';
-import { KeyboardAvoidingView, Platform, TextInput, Alert } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
+  Alert,
+  ActivityIndicator,
+  View,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
+import { useTheme } from 'styled-components';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -22,7 +30,8 @@ const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
-  const { signIn } = useAuth();
+  const { signIn, loading } = useAuth();
+  const { colors } = useTheme();
 
   const handleSignIn = useCallback(
     async (data: SignInFormData) => {
@@ -70,6 +79,7 @@ const SignIn: React.FC = () => {
           <Form onSubmit={handleSignIn} ref={formRef}>
             <Title>Faça seu login 🔑</Title>
             <Input
+              testID="@pages:signin/email"
               title="E-mail ou usuário"
               autoCorrect={false}
               autoCapitalize="none"
@@ -84,6 +94,7 @@ const SignIn: React.FC = () => {
             />
 
             <Input
+              testID="@pages:signin/password"
               title="Senha"
               ref={passwordInputRef}
               name="password"
@@ -92,7 +103,14 @@ const SignIn: React.FC = () => {
               onSubmitEditing={() => formRef.current?.submitForm()}
             />
           </Form>
-          <Button onPress={() => formRef.current?.submitForm()}>Entrar</Button>
+
+          <Button onPress={() => formRef.current?.submitForm()}>
+            {loading ? (
+              <ActivityIndicator size={24} color={colors.white} />
+            ) : (
+              'Entrar'
+            )}
+          </Button>
         </Container>
       </KeyboardAvoidingView>
     </>

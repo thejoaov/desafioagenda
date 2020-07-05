@@ -2,6 +2,7 @@ import {
   DrawerContentScrollView,
   DrawerItem,
   DrawerContentComponentProps,
+  DrawerContentOptions,
 } from '@react-navigation/drawer';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
@@ -55,17 +56,19 @@ export const ProfileName = styled.Text`
   font-size: 16px;
 `;
 
-export const CustomDrawerItem = styled<typeof DrawerItem>(DrawerItem).attrs({
-  labelStyle: {
-    fontSize: 16,
-    marginLeft: -10,
-    height: 22,
-  },
-  itemStyle: {
-    width: '80%',
-    alignSelf: 'center',
-  },
-})``;
+export const CustomDrawerItem = styled(DrawerItem).attrs(
+  (): DrawerContentOptions => ({
+    labelStyle: {
+      fontSize: 16,
+      marginLeft: -10,
+      height: 22,
+    },
+    itemStyle: {
+      width: '80%',
+      alignSelf: 'center',
+    },
+  }),
+)``;
 
 export const HorizontalRule = styled.View`
   border-bottom-width: 1px;
@@ -74,14 +77,3 @@ export const HorizontalRule = styled.View`
 
   align-self: center;
 `;
-
-export const LogoutDrawerItem = styled<typeof DrawerItem>(DrawerItem).attrs(
-  ({ theme }) => ({
-    labelStyle: {
-      fontSize: 16,
-      marginLeft: -10,
-      paddingTop: 5,
-      color: theme.colors.purple,
-    },
-  }),
-)``;

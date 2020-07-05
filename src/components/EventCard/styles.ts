@@ -6,6 +6,7 @@ export const Container = styled.View`
   padding: 16px;
   margin-bottom: 24px;
   box-shadow: 1px 1px 10px ${({ theme }) => theme.colors.purpleDark};
+  elevation: 10;
   border-radius: 5px;
   border-left-width: 5px;
   border-left-color: ${({ theme }) => theme.colors.purple};

@@ -43,6 +43,8 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     async function loadStorageData(): Promise<void> {
+      setLoading(true);
+
       const [token, user] = await AsyncStorage.multiGet([
         '@DesafioAgenda:token',
         '@DesafioAgenda:user',
@@ -61,7 +63,9 @@ const AuthProvider: React.FC = ({ children }) => {
   }, []);
 
   const signIn = useCallback(async ({ email, password }) => {
-    const reseponse = await api.post('login', { email, password });
+    setLoading(true);
+
+    const response = await api.post('login', { email, password });
 
     // Here comes the default user, since AgendaApi doesn't have one
     const user: User = {
@@ -71,7 +75,7 @@ const AuthProvider: React.FC = ({ children }) => {
       name: 'Jim Halpert',
     };
 
-    const { token } = reseponse.data;
+    const { token } = response.data;
 
     await AsyncStorage.multiSet([
       ['@DesafioAgenda:token', token],
@@ -81,6 +85,7 @@ const AuthProvider: React.FC = ({ children }) => {
     api.defaults.headers.token = `${token}`;
 
     setData({ token, user });
+    setLoading(false);
   }, []);
 
   const signOut = useCallback(async () => {
