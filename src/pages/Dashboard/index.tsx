@@ -1,106 +1,126 @@
-import React, { useCallback, useEffect, useState } from 'react';
+/* eslint-disable no-param-reassign */
+import React, {
+  useCallback,
+  useLayoutEffect,
+  useEffect,
+  useState,
+} from 'react';
+import { SectionList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Feather as Icon } from '@expo/vector-icons';
-
 import { useTheme } from 'styled-components';
+import { StackHeaderOptions } from '@react-navigation/stack/lib/typescript/src/types';
+import { format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+
 import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 
-import {
-  Container,
-  Header,
-  HeaderTitle,
-  UserName,
-  ProfileButton,
-  UserAvatar,
-  ProvidersList,
-  ProvidersListTitle,
-  ProviderContainer,
-  ProviderAvatar,
-  ProviderInfo,
-  ProviderName,
-  ProviderMeta,
-  ProviderMetaText,
-} from './styles';
+import { SectionTitleView, SectionTitle, SectionDivider } from './styles';
+import EventCard from '../../components/EventCard';
+import getCapitalizedText from '../../utils/getCapitalizedText';
 
-export interface Provider {
-  id: string;
-  name: string;
-  avatar_url: string;
+export interface Event {
+  id: number;
+  title: string;
+  description: string;
+  sendAt: string;
+  image: string;
+  startAt: string;
+  location: string;
+}
+
+interface ApiResponse {
+  data: Event[];
+  metadata: {
+    page: string | number;
+    limit: string | number;
+    pre_page?: string | number;
+    next_page?: string | number;
+    total?: string | number;
+    total_pages?: string | number;
+  };
+}
+
+interface EventsSections {
+  title: string;
+  data: Event[];
 }
 
 const Dashboard: React.FC = () => {
-  const [providers, setProviders] = useState<Provider[]>([]);
+  const [events, setEvents] = useState<EventsSections[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
   const { user } = useAuth();
-  const { navigate } = useNavigation();
+  const { navigate, setOptions } = useNavigation();
   const theme = useTheme();
 
-  useEffect(() => {
-    api.get('/providers').then(response => {
-      setProviders(response.data);
+  useLayoutEffect(() => {
+    const options: StackHeaderOptions = {
+      headerTitle: 'Eventos',
+    };
+    setOptions(options);
+  }, [setOptions]);
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    api.get(`/events?limit=10&page=${page}`).then(({ data }) => {
+      const responseData: ApiResponse = data;
+
+      responseData.data.sort((a, b) => {
+        return (((new Date(b.startAt) as Date) <
+          new Date(a.startAt)) as unknown) as number;
+      });
+
+      const group = responseData.data.reduce((groups: any, event) => {
+        const date = event.startAt.split('T')[0];
+        if (!groups[date]) {
+          groups[date] = [];
+        }
+        groups[date].push(event);
+        return groups;
+      }, {});
+
+      const eventSectionList: EventsSections[] = Object.keys(group).map(
+        date => {
+          return {
+            title: date,
+            data: group[date],
+          };
+        },
+      );
+
+      setEvents(eventSectionList);
     });
-  }, []);
+    setLoading(false);
+  }, [page]);
 
-  const navigateToProfile = useCallback(() => {
-    // navigate('Profile');
-  }, [navigate]);
-
-  const navigateToCreateAppointment = useCallback(
-    (providerId: string) => {
-      navigate('CreateAppointment', { providerId });
-    },
-    [navigate],
-  );
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   return (
-    <Container>
-      <Header>
-        <HeaderTitle>
-          Bem vindo,{'\n'}
-          <UserName>{user.name}</UserName>
-        </HeaderTitle>
-
-        <ProfileButton onPress={navigateToProfile}>
-          <UserAvatar source={{ uri: user.avatar_url }} />
-        </ProfileButton>
-      </Header>
-
-      <ProvidersList
-        data={providers}
-        keyExtractor={provider => provider.id}
-        ListHeaderComponent={
-          <ProvidersListTitle>Cabeleireiros</ProvidersListTitle>
-        }
-        renderItem={({ item: provider }) => (
-          <ProviderContainer
-            onPress={() => navigateToCreateAppointment(provider.id)}
-          >
-            <ProviderAvatar
-              source={{
-                uri:
-                  provider.avatar_url ||
-                  'https://api.adorable.io/avatars/72/abott@adorable.png',
-              }}
-            />
-
-            <ProviderInfo>
-              <ProviderName>{provider.name}</ProviderName>
-
-              <ProviderMeta>
-                <Icon name="calendar" size={14} color={theme.colors.purple} />
-                <ProviderMetaText>Segunda à sexta</ProviderMetaText>
-              </ProviderMeta>
-
-              <ProviderMeta>
-                <Icon name="clock" size={14} color={theme.colors.purple} />
-                <ProviderMetaText>8h às 18h</ProviderMetaText>
-              </ProviderMeta>
-            </ProviderInfo>
-          </ProviderContainer>
-        )}
-      />
-    </Container>
+    <SectionList
+      style={{
+        backgroundColor: theme.colors.background,
+        paddingHorizontal: 24,
+      }}
+      sections={events}
+      keyExtractor={(item, index) => String(item.id + index)}
+      renderItem={({ item }) => <EventCard {...item} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionTitleView>
+          <SectionTitle>
+            {getCapitalizedText(
+              format(new Date(title), "EEEE, d 'de' MMMM", {
+                locale: ptBR,
+              }),
+            )}
+          </SectionTitle>
+          <SectionDivider />
+        </SectionTitleView>
+      )}
+    />
   );
 };
 

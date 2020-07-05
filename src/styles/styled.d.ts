@@ -15,7 +15,8 @@ declare module 'styled-components' {
       shape: string;
       blackMedium: string;
       black: string;
-
+      purpleDark: string;
+      lightGray: string;
       error: string;
     };
   }

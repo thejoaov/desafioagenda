@@ -1,14 +1,14 @@
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import {
+  DrawerContentScrollView,
+  DrawerItem,
+  DrawerContentComponentProps,
+} from '@react-navigation/drawer';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 
-// export const Background = styled.View`
-//   flex: 1;
-//   justify-content: center;
-//   background-color: ${({ theme }) => theme.colors.white};
-// `;
-
-export const CustomDrawerContent = styled(DrawerContentScrollView).attrs({
+export const CustomDrawerContent: React.FC<DrawerContentComponentProps> = styled(
+  DrawerContentScrollView,
+).attrs({
   contentContainerStyle: {
     justifyContent: 'center',
   },
@@ -44,7 +44,6 @@ export const ProfilePhotoView = styled.View`
   border-radius: 50px;
   margin: 20px 0;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
-
   elevation: 10;
   align-self: center;
 `;
