@@ -4,16 +4,16 @@ on:
     branches:
       - master
 jobs:
-#   test:
-#     name: Test application
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: actions/setup-node@v1
-#         with:
-#           node-version: 12.x
-#       - run: yarn
-#       - run: yarn test
+  test:
+    name: Test application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - run: yarn
+      - run: yarn test
   publish:
     name: Install and publish
     runs-on: ubuntu-latest
