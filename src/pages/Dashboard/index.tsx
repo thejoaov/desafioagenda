@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { SectionList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import { StackHeaderOptions } from '@react-navigation/stack/lib/typescript/src/types';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -52,15 +52,15 @@ const Dashboard: React.FC = () => {
   const [page, setPage] = useState(1);
 
   const { user } = useAuth();
-  const { navigate, setOptions } = useNavigation();
+  const navigation = useNavigation();
   const theme = defaultTheme;
 
   useLayoutEffect(() => {
     const options: StackHeaderOptions = {
       headerTitle: 'Eventos',
     };
-    setOptions(options);
-  }, [setOptions]);
+    navigation.setOptions(options);
+  }, [navigation]);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -99,6 +99,13 @@ const Dashboard: React.FC = () => {
     loadData();
   }, [loadData]);
 
+  const handleNavigateDetail = useCallback(
+    event => {
+      navigation.navigate('EventDetail', { ...event });
+    },
+    [navigation],
+  );
+
   return (
     <SectionList
       style={{
@@ -107,7 +114,9 @@ const Dashboard: React.FC = () => {
       }}
       sections={events}
       keyExtractor={(item, index) => String(item.id + index)}
-      renderItem={({ item }) => <EventCard {...item} />}
+      renderItem={({ item }) => (
+        <EventCard {...item} onPress={() => handleNavigateDetail(item)} />
+      )}
       renderSectionHeader={({ section: { title } }) => (
         <SectionTitleView>
           <SectionTitle>

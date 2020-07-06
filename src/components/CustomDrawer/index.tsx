@@ -1,9 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { Alert, ToastAndroid as Toast, Platform } from 'react-native';
+import { Alert } from 'react-native';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-
-import { useAuth } from '../../hooks/auth';
 
 import {
   CustomDrawerContent,
@@ -15,6 +13,8 @@ import {
   ProfilePhotoView,
   ProfilePhotoIcon,
 } from './styles';
+
+import { useAuth } from '../../hooks/auth';
 
 const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
   const { user, signOut } = useAuth();
@@ -36,9 +36,9 @@ const CustomDrawer: React.FC<DrawerContentComponentProps> = props => {
 
   const handleEasterEgg = useCallback(() => {
     setCounter(counter + 1);
-    Platform.OS === 'android' && Toast.show(`Counter: ${counter}`, Toast.SHORT);
     if (counter > 2) {
       Alert.alert('Michael Scott says:', '"That\'s what she said 😀"');
+      setCounter(0);
     }
   }, [counter]);
 

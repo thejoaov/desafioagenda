@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-curly-newline */
 /* eslint-disable react/display-name */
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
@@ -8,36 +9,52 @@ import {
 import {
   createStackNavigator,
   StackHeaderLeftButtonProps,
+  StackNavigationOptions,
 } from '@react-navigation/stack';
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 
 import defaultTheme from '../styles/theme/default';
 
 import Dashboard from '../pages/Dashboard';
+import EventDetail from '../pages/EventDetail';
 import CustomDrawer from '../components/CustomDrawer';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-const BackButton: React.FC<StackHeaderLeftButtonProps> = props => (
-  <TouchableOpacity {...props}>
-    <Icon name="menu" size={24} color={defaultTheme.colors.black} />
+const BackButton: React.FC<StackHeaderLeftButtonProps> = ({
+  canGoBack,
+  ...props
+}) => (
+  <TouchableOpacity {...props} style={{ marginLeft: 20 }}>
+    <Icon
+      name={canGoBack ? 'arrow-left' : 'menu'}
+      size={24}
+      color={defaultTheme.colors.black}
+    />
   </TouchableOpacity>
 );
 
 const DashboardRoutes: React.FC = () => (
   <Stack.Navigator
-    screenOptions={({ navigation }) => ({
+    initialRouteName="Dashboard"
+    screenOptions={({ navigation }): StackNavigationOptions => ({
       headerTitleAlign: 'left',
-      headerLeft: () => (
+      headerLeft: ({ canGoBack }: StackHeaderLeftButtonProps) => (
         <BackButton
-          onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+          canGoBack={canGoBack}
+          onPress={() =>
+            canGoBack
+              ? navigation.goBack()
+              : navigation.dispatch(DrawerActions.toggleDrawer())
+          }
         />
       ),
     })}
   >
     <Stack.Screen name="Dashboard" component={Dashboard} />
+    <Stack.Screen name="EventDetail" component={EventDetail} />
   </Stack.Navigator>
 );
 

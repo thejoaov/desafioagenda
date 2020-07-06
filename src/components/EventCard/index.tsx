@@ -1,9 +1,9 @@
 import React from 'react';
 import { AntDesign as Icon } from '@expo/vector-icons';
-import { useTheme } from 'styled-components';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
+import { TouchableOpacityProps } from 'react-native';
 import {
   Container,
   Image,
@@ -22,11 +22,16 @@ import defaultTheme from '../../styles/theme/default';
 
 type Props = Event;
 
-const EventCard: React.FC<Props> = ({ title, startAt, image }) => {
+const EventCard: React.FC<Props & TouchableOpacityProps> = ({
+  title,
+  startAt,
+  image,
+  ...rest
+}) => {
   const theme = defaultTheme;
 
   return (
-    <Container>
+    <Container {...rest}>
       {image && (
         <ImageView>
           <Image source={{ uri: image }} />
@@ -37,11 +42,7 @@ const EventCard: React.FC<Props> = ({ title, startAt, image }) => {
         <Title numberOfLines={1}>{title}</Title>
         <TimeView>
           <Icon name="clockcircleo" size={14} color={theme.colors.gray} />
-          <Time>
-            {format(new Date(startAt).setUTCHours(-3), 'p a', {
-              locale: ptBR,
-            })}
-          </Time>
+          <Time>{format(new Date(startAt).setUTCHours(-3), 'p')}</Time>
         </TimeView>
         <EventDate>
           {getCapitalizedText(
