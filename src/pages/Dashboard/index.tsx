@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { SectionList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from 'styled-components';
 import { StackHeaderOptions } from '@react-navigation/stack/lib/typescript/src/types';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';

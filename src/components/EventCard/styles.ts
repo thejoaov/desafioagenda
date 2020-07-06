@@ -4,10 +4,11 @@ import defaultTheme from '../../styles/theme/default';
 export const Container = styled.View`
   flex-direction: row;
   background-color: ${defaultTheme.colors.background};
-  padding: 16px;
+  padding: 10px;
+  margin: 0 6px;
   margin-bottom: 24px;
   box-shadow: 1px 1px 10px ${defaultTheme.colors.purpleDark};
-  elevation: 10;
+  elevation: 3;
   border-radius: 5px;
   border-left-width: 5px;
   border-left-color: ${defaultTheme.colors.purple};
