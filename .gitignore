@@ -64,3 +64,14 @@ buck-out/
 
 # Testing
 **/coverage
+
+# Expo
+.expo/*
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
