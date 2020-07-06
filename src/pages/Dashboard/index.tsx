@@ -5,8 +5,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { SectionList } from 'react-native';
-import { useNavigation, CommonActions } from '@react-navigation/native';
+import { SectionList, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { StackHeaderOptions } from '@react-navigation/stack/lib/typescript/src/types';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -29,16 +29,17 @@ export interface Event {
   location: string;
 }
 
+interface ApiResponseMetadata {
+  page: string | number;
+  limit: string | number;
+  pre_page?: string | number;
+  next_page?: string | number;
+  total?: string | number;
+  total_pages?: string | number;
+}
 interface ApiResponse {
   data: Event[];
-  metadata: {
-    page: string | number;
-    limit: string | number;
-    pre_page?: string | number;
-    next_page?: string | number;
-    total?: string | number;
-    total_pages?: string | number;
-  };
+  metadata: ApiResponseMetadata;
 }
 
 interface EventsSections {
@@ -50,6 +51,9 @@ const Dashboard: React.FC = () => {
   const [events, setEvents] = useState<EventsSections[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [apiMetadata, setApiMetadata] = useState<ApiResponseMetadata | null>(
+    null,
+  );
 
   const { user } = useAuth();
   const navigation = useNavigation();
@@ -62,41 +66,55 @@ const Dashboard: React.FC = () => {
     navigation.setOptions(options);
   }, [navigation]);
 
-  const loadData = useCallback(async () => {
-    setLoading(true);
-    api.get(`/events?limit=10&page=${page}`).then(({ data }) => {
-      const responseData: ApiResponse = data;
+  const loadData = useCallback(
+    async (currentPage = page) => {
+      setLoading(true);
+      api.get(`/events?limit=10&page=${currentPage}`).then(({ data }) => {
+        const { data: responseData, metadata }: ApiResponse = data;
+        setApiMetadata(metadata);
 
-      responseData.data.sort((a, b) => {
-        return (((new Date(b.startAt) as Date) <
-          new Date(a.startAt)) as unknown) as number;
+        responseData.sort((a, b) => {
+          return (((new Date(b.startAt) as Date) <
+            new Date(a.startAt)) as unknown) as number;
+        });
+
+        const group = responseData.reduce((groups: any, event) => {
+          const date = event.startAt.split('T')[0];
+          if (!groups[date]) {
+            groups[date] = [];
+          }
+          groups[date].push(event);
+          return groups;
+        }, {});
+
+        const eventSectionList: EventsSections[] = Object.keys(group).map(
+          date => {
+            return {
+              title: date,
+              data: group[date],
+            };
+          },
+        );
+
+        setEvents(prevState => [...prevState, ...eventSectionList]);
       });
+      setLoading(false);
+    },
+    [page],
+  );
 
-      const group = responseData.data.reduce((groups: any, event) => {
-        const date = event.startAt.split('T')[0];
-        if (!groups[date]) {
-          groups[date] = [];
-        }
-        groups[date].push(event);
-        return groups;
-      }, {});
+  const handleLoadMore = useCallback(async () => {
+    if (page === 1) {
+      setPage(page + 1);
+    } else if (apiMetadata?.total_pages !== page && page !== 1) {
+      setPage(page + 1);
+      await loadData(page);
+    }
+  }, [apiMetadata?.total_pages, loadData, page]);
 
-      const eventSectionList: EventsSections[] = Object.keys(group).map(
-        date => {
-          return {
-            title: date,
-            data: group[date],
-          };
-        },
-      );
-
-      setEvents(eventSectionList);
-    });
-    setLoading(false);
-  }, [page]);
-
-  useEffect(() => {
-    loadData();
+  const handleReload = useCallback(() => {
+    setEvents([]);
+    loadData(1);
   }, [loadData]);
 
   const handleNavigateDetail = useCallback(
@@ -106,13 +124,24 @@ const Dashboard: React.FC = () => {
     [navigation],
   );
 
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   return (
     <SectionList
       style={{
         backgroundColor: theme.colors.background,
         paddingHorizontal: 24,
       }}
+      refreshing={loading}
+      onRefresh={handleReload}
       sections={events}
+      onEndReachedThreshold={0.1}
+      onEndReached={handleLoadMore}
+      ListFooterComponent={() => (
+        <ActivityIndicator size={24} color={theme.colors.purple} />
+      )}
       keyExtractor={(item, index) => String(item.id + index)}
       renderItem={({ item }) => (
         <EventCard {...item} onPress={() => handleNavigateDetail(item)} />
