@@ -1,15 +1,16 @@
 import styled from 'styled-components/native';
+import defaultTheme from '../../styles/theme/default';
 
 export const Container = styled.View`
   flex-direction: row;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: ${defaultTheme.colors.background};
   padding: 16px;
   margin-bottom: 24px;
-  box-shadow: 1px 1px 10px ${({ theme }) => theme.colors.purpleDark};
+  box-shadow: 1px 1px 10px ${defaultTheme.colors.purpleDark};
   elevation: 10;
   border-radius: 5px;
   border-left-width: 5px;
-  border-left-color: ${({ theme }) => theme.colors.purple};
+  border-left-color: ${defaultTheme.colors.purple};
 `;
 
 export const ImageView = styled.View`
@@ -17,7 +18,7 @@ export const ImageView = styled.View`
   width: 66px;
   border-radius: 3px;
   margin-right: 12px;
-  background-color: ${({ theme }) => theme.colors.lightGray};
+  background-color: ${defaultTheme.colors.lightGray};
 `;
 
 export const Image = styled.Image`
@@ -32,7 +33,7 @@ export const CardBody = styled.View`
 export const Events = styled.Text`
   font-size: 12px;
   text-transform: uppercase;
-  color: ${({ theme }) => theme.colors.lightGray};
+  color: ${defaultTheme.colors.lightGray};
   font-weight: 600;
   letter-spacing: 0.72px;
   margin-bottom: 11.97px;
@@ -40,7 +41,7 @@ export const Events = styled.Text`
 
 export const Title = styled.Text`
   font-size: 16px;
-  color: ${({ theme }) => theme.colors.grayHard};
+  color: ${defaultTheme.colors.grayHard};
   font-weight: 600;
 `;
 
@@ -52,7 +53,7 @@ export const TimeView = styled.View`
 
 export const Time = styled.Text`
   font-size: 14px;
-  color: ${({ theme }) => theme.colors.gray};
+  color: ${defaultTheme.colors.gray};
   line-height: 16px;
   align-self: center;
   margin-left: 6px;
@@ -61,5 +62,5 @@ export const Time = styled.Text`
 export const EventDate = styled.Text`
   font-size: 12px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.lightGray};
+  color: ${defaultTheme.colors.lightGray};
 `;

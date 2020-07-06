@@ -2,7 +2,6 @@ import { DefaultTheme } from 'styled-components';
 
 const defaultTheme: DefaultTheme = {
   title: 'default',
-
   colors: {
     background: '#fff',
     white: '#fff',

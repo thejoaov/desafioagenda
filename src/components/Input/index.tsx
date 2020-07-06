@@ -7,7 +7,13 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from 'react';
-import { TextInputProps, ViewStyle, StyleProp } from 'react-native';
+import {
+  TextInputProps,
+  ViewStyle,
+  StyleProp,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import { useField } from '@unform/core';
 
 import { Container, TextInput, Icon, InputTitle } from './styles';
@@ -28,7 +34,14 @@ interface InputRef {
 }
 
 const Input: React.RefForwardingComponent<InputRef, InputProps> = (
-  { name, title, icon, containerStyle = {}, ...rest },
+  {
+    name,
+    title,
+    icon,
+    containerStyle = {},
+    testID = '@components:input',
+    ...rest
+  },
   ref,
 ) => {
   const inputElementRef = useRef<any>(null);
@@ -78,13 +91,17 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
 
   return (
     <>
-      {title && <InputTitle>{title}</InputTitle>}
+      {title && (
+        <InputTitle testID="@components:input/title">{title}</InputTitle>
+      )}
       <Container
         style={containerStyle}
         isFocused={isFocused}
         isErrored={!!error}
+        testID="@components:input/container"
       >
         <TextInput
+          testID={testID}
           ref={inputElementRef}
           keyboardAppearance="dark"
           defaultValue={defaultValue}
@@ -98,20 +115,26 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
           {...rest}
         />
         {icon && name !== 'password' ? (
-          <Icon
-            isFilled={isFilled}
-            isFocused={isFocused}
-            name={icon}
-            size={20}
-          />
+          <View testID="@components:input/icon">
+            <Icon
+              isFilled={isFilled}
+              isFocused={isFocused}
+              name={icon}
+              size={20}
+            />
+          </View>
         ) : (
-          <Icon
+          <TouchableOpacity
+            testID="@components:input/icon"
             onPress={handleVisibility}
-            isFilled={isFilled}
-            isFocused={isFocused}
-            name={isVisible ? 'eye' : 'eye-off'}
-            size={20}
-          />
+          >
+            <Icon
+              isFilled={isFilled}
+              isFocused={isFocused}
+              name={isVisible ? 'eye' : 'eye-off'}
+              size={20}
+            />
+          </TouchableOpacity>
         )}
       </Container>
     </>

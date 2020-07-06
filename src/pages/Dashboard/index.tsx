@@ -18,6 +18,7 @@ import api from '../../services/api';
 import { SectionTitleView, SectionTitle, SectionDivider } from './styles';
 import EventCard from '../../components/EventCard';
 import getCapitalizedText from '../../utils/getCapitalizedText';
+import defaultTheme from '../../styles/theme/default';
 
 export interface Event {
   id: number;
@@ -53,7 +54,7 @@ const Dashboard: React.FC = () => {
 
   const { user } = useAuth();
   const { navigate, setOptions } = useNavigation();
-  const theme = useTheme();
+  const theme = defaultTheme;
 
   useLayoutEffect(() => {
     const options: StackHeaderOptions = {

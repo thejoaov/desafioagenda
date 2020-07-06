@@ -16,14 +16,7 @@ module.exports = {
     '**/__tests__/**/(*.)+(spec|test).[jt]s?(x)',
     // '**/?(*.)+(spec|test).[jt]s?(x)',
   ],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   collectCoverage: true,
-  collectCoverageFrom: [
-    '**/*.{js,jsx}',
-    '!**/coverage/**',
-    '!**/node_modules/**',
-    '!**/babel.config.js',
-    '!**/jest.setup.js',
-  ],
   coverageDirectory: './src/__tests__/coverage',
 };

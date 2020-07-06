@@ -18,11 +18,12 @@ import {
 
 import { Event } from '../../pages/Dashboard';
 import getCapitalizedText from '../../utils/getCapitalizedText';
+import defaultTheme from '../../styles/theme/default';
 
 type Props = Event;
 
 const EventCard: React.FC<Props> = ({ title, startAt, image }) => {
-  const theme = useTheme();
+  const theme = defaultTheme;
 
   return (
     <Container>

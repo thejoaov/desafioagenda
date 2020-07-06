@@ -6,6 +6,7 @@ import {
 } from '@react-navigation/drawer';
 import styled from 'styled-components/native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import defaultTheme from '../../styles/theme/default';
 
 export const CustomDrawerContent: React.FC<DrawerContentComponentProps> = styled(
   DrawerContentScrollView,
@@ -35,7 +36,7 @@ export const ProfilePhoto = styled.Image`
 `;
 
 export const ProfilePhotoView = styled.View`
-  background-color: ${({ theme }) => theme.colors.gray};
+  background-color: ${defaultTheme.colors.gray};
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -50,7 +51,7 @@ export const ProfilePhotoView = styled.View`
 `;
 
 export const ProfileName = styled.Text`
-  color: ${({ theme }) => theme.colors.purple};
+  color: ${defaultTheme.colors.purple};
   text-transform: capitalize;
 
   font-size: 16px;

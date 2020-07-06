@@ -20,6 +20,7 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import { useAuth } from '../../hooks/auth';
 
 import { Container, Form, Title } from './styles';
+import defaultTheme from '../../styles/theme/default';
 
 interface SignInFormData {
   email: string;
@@ -31,7 +32,7 @@ const SignIn: React.FC = () => {
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
   const { signIn, loading } = useAuth();
-  const { colors } = useTheme();
+  const { colors } = defaultTheme;
 
   const handleSignIn = useCallback(
     async (data: SignInFormData) => {
