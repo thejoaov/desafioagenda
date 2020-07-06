@@ -5,7 +5,9 @@ import Dashboard from '../../pages/Dashboard';
 
 jest.mock('@react-navigation/native', () => {
   return {
-    useNavigation: jest.fn(),
+    useNavigation: () => ({
+      setOptions: jest.fn(),
+    }),
   };
 });
 
@@ -13,6 +15,6 @@ describe('Dashboard page', () => {
   it('Should contains email/password field', () => {
     const { getByTestId } = render(<Dashboard />);
 
-    expect(getByTestId('@pages:Dashboard/password')).toBeTruthy();
+    expect(getByTestId('@pages:dashboard/container')).toBeTruthy();
   });
 });

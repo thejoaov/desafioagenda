@@ -55,7 +55,6 @@ const Dashboard: React.FC = () => {
     null,
   );
 
-  const { user } = useAuth();
   const navigation = useNavigation();
   const theme = defaultTheme;
 
@@ -130,6 +129,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <SectionList
+      testID="@pages:dashboard/container"
       style={{
         backgroundColor: theme.colors.background,
         paddingHorizontal: 24,
