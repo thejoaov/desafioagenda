@@ -53,8 +53,16 @@ const DashboardRoutes: React.FC = () => (
       ),
     })}
   >
-    <Stack.Screen name="Dashboard" component={Dashboard} />
-    <Stack.Screen name="EventDetail" component={EventDetail} />
+    <Stack.Screen
+      name="Dashboard"
+      component={Dashboard}
+      options={{ title: 'Eventos' }}
+    />
+    <Stack.Screen
+      name="EventDetail"
+      component={EventDetail}
+      options={{ title: 'Detalhes do evento' }}
+    />
   </Stack.Navigator>
 );
 

@@ -26,25 +26,30 @@ const EventCard: React.FC<Props & TouchableOpacityProps> = ({
   title,
   startAt,
   image,
+  testID = '@components:eventcard/container',
   ...rest
 }) => {
   const theme = defaultTheme;
 
   return (
-    <Container {...rest}>
+    <Container testID={testID} {...rest}>
       {image && (
         <ImageView>
-          <Image source={{ uri: image }} />
+          <Image source={{ uri: image }} testID="@components:eventcard/image" />
         </ImageView>
       )}
       <CardBody>
         <Events>Eventos</Events>
-        <Title numberOfLines={1}>{title}</Title>
+        <Title testID="@components:eventcard/title" numberOfLines={1}>
+          {title}
+        </Title>
         <TimeView>
           <Icon name="clockcircleo" size={14} color={theme.colors.gray} />
-          <Time>{format(new Date(startAt).setUTCHours(-3), 'p')}</Time>
+          <Time testID="@components:eventcard/eventtime">
+            {format(new Date(startAt).setUTCHours(-3), 'p')}
+          </Time>
         </TimeView>
-        <EventDate>
+        <EventDate testID="@components:eventcard/eventdate">
           {getCapitalizedText(
             format(
               new Date(startAt).setUTCHours(-3),

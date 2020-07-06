@@ -28,8 +28,8 @@ const EventDetail: React.FC = () => {
   const { title, description, image, startAt } = params as Event;
 
   return (
-    <Container>
-      <Image source={{ uri: image }} />
+    <Container testID="@pages:eventdetail/container">
+      <Image source={{ uri: image }} testID="@pages:eventdetail/image" />
       <Body>
         <EventHeader>
           <EventDateView>
@@ -43,7 +43,11 @@ const EventDetail: React.FC = () => {
             </EventMonth>
           </EventDateView>
           <TitleView>
-            <Title numberOfLines={3} ellipsizeMode="tail">
+            <Title
+              numberOfLines={3}
+              ellipsizeMode="tail"
+              testID="@pages:eventdetail/title"
+            >
               {title}
             </Title>
             <TimeView>
@@ -52,7 +56,9 @@ const EventDetail: React.FC = () => {
             </TimeView>
           </TitleView>
         </EventHeader>
-        <Description>{description}</Description>
+        <Description testID="@pages:eventdetail/description">
+          {description}
+        </Description>
       </Body>
     </Container>
   );

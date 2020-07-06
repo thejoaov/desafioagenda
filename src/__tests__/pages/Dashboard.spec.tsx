@@ -12,7 +12,7 @@ jest.mock('@react-navigation/native', () => {
 });
 
 describe('Dashboard page', () => {
-  it('Should contains email/password field', () => {
+  it('Should render correctly', async () => {
     const { getByTestId } = render(<Dashboard />);
 
     expect(getByTestId('@pages:dashboard/container')).toBeTruthy();

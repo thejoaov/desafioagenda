@@ -58,13 +58,6 @@ const Dashboard: React.FC = () => {
   const navigation = useNavigation();
   const theme = defaultTheme;
 
-  useLayoutEffect(() => {
-    const options: StackHeaderOptions = {
-      headerTitle: 'Eventos',
-    };
-    navigation.setOptions(options);
-  }, [navigation]);
-
   const loadData = useCallback(
     async (currentPage = page) => {
       setLoading(true);
@@ -143,7 +136,7 @@ const Dashboard: React.FC = () => {
         <ActivityIndicator size={24} color={theme.colors.purple} />
       )}
       keyExtractor={(item, index) => String(item.id + index)}
-      renderItem={({ item }) => (
+      renderItem={({ item, index }) => (
         <EventCard {...item} onPress={() => handleNavigateDetail(item)} />
       )}
       renderSectionHeader={({ section: { title } }) => (
