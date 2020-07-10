@@ -92,7 +92,9 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = (
   return (
     <>
       {title && (
-        <InputTitle testID="@components:input/title">{title}</InputTitle>
+        <InputTitle testID="@components:input/title">
+          {error || title}
+        </InputTitle>
       )}
       <Container
         style={containerStyle}

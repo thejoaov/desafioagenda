@@ -5,7 +5,7 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-
+import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../services/api';
@@ -64,27 +64,33 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const signIn = useCallback(async ({ email, password }) => {
     setLoading(true);
+    try {
+      const response = await api.post('login', { email, password });
 
-    const response = await api.post('login', { email, password });
+      // Here comes the default user, since AgendaApi doesn't have one
+      const user: User = {
+        avatar_url: 'https://i.imgur.com/cOip4HQ.jpg',
+        email,
+        id: '1',
+        name: 'Jim Halpert',
+      };
 
-    // Here comes the default user, since AgendaApi doesn't have one
-    const user: User = {
-      avatar_url: 'https://i.imgur.com/cOip4HQ.jpg',
-      email,
-      id: '1',
-      name: 'Jim Halpert',
-    };
+      const { token } = response.data;
 
-    const { token } = response.data;
+      await AsyncStorage.multiSet([
+        ['@DesafioAgenda:token', token],
+        ['@DesafioAgenda:user', JSON.stringify(user)],
+      ]);
 
-    await AsyncStorage.multiSet([
-      ['@DesafioAgenda:token', token],
-      ['@DesafioAgenda:user', JSON.stringify(user)],
-    ]);
+      api.defaults.headers.token = `${token}`;
 
-    api.defaults.headers.token = `${token}`;
-
-    setData({ token, user });
+      setData({ token, user });
+    } catch (error) {
+      Alert.alert(
+        'Erro na autenticação',
+        'Ocorreu um erro ao fazer login, cheque as credenciais.',
+      );
+    }
     setLoading(false);
   }, []);
 

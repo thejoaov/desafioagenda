@@ -5,12 +5,9 @@ import {
   TextInput,
   Alert,
   ActivityIndicator,
-  View,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
-import { useTheme } from 'styled-components';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -30,7 +27,6 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const passwordInputRef = useRef<TextInput>(null);
-  const navigation = useNavigation();
   const { signIn, loading } = useAuth();
   const { colors } = defaultTheme;
 
@@ -41,9 +37,11 @@ const SignIn: React.FC = () => {
 
         const schema = Yup.object().shape({
           email: Yup.string()
-            .required('E-mail é obrigatório')
+            .required('O e-mail é obrigatório')
             .email('Digite um e-mail válido'),
-          password: Yup.string().required('Senha é obrigatória'),
+          password: Yup.string()
+            .min(6, 'A senha deve conter no mínimo 6 caracteres')
+            .required('A senha é obrigatória'),
         });
 
         await schema.validate(data, { abortEarly: false });
@@ -57,13 +55,12 @@ const SignIn: React.FC = () => {
           const errors = getValidationErrors(err);
 
           formRef.current?.setErrors(errors);
-          return;
+        } else {
+          Alert.alert(
+            'Ocorreu um erro',
+            'Verifique sua conexão e tente novamente',
+          );
         }
-
-        Alert.alert(
-          'Erro na autenticação',
-          'Ocorreu um error ao fazer login, cheque as credenciais.',
-        );
       }
     },
     [signIn],

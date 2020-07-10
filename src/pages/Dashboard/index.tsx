@@ -1,17 +1,10 @@
 /* eslint-disable no-param-reassign */
-import React, {
-  useCallback,
-  useLayoutEffect,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SectionList, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { StackHeaderOptions } from '@react-navigation/stack/lib/typescript/src/types';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
-import { useAuth } from '../../hooks/auth';
 import api from '../../services/api';
 
 import { SectionTitleView, SectionTitle, SectionDivider } from './styles';
@@ -96,9 +89,7 @@ const Dashboard: React.FC = () => {
   );
 
   const handleLoadMore = useCallback(async () => {
-    if (page === 1) {
-      setPage(page + 1);
-    } else if (apiMetadata?.total_pages !== page && page !== 1) {
+    if (apiMetadata?.total_pages !== page && page !== 1) {
       setPage(page + 1);
       await loadData(page);
     }
@@ -136,7 +127,7 @@ const Dashboard: React.FC = () => {
         <ActivityIndicator size={24} color={theme.colors.purple} />
       )}
       keyExtractor={(item, index) => String(item.id + index)}
-      renderItem={({ item, index }) => (
+      renderItem={({ item }) => (
         <EventCard {...item} onPress={() => handleNavigateDetail(item)} />
       )}
       renderSectionHeader={({ section: { title } }) => (
